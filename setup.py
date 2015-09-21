@@ -18,6 +18,9 @@ setup(
     url='http://www.pycon.onapsis.com/pywars',
     author='Pedro Guridi',
     author_email='support@onapsis.com',
+    install_requires=[
+        "celery",
+    ],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',

@@ -1,18 +1,18 @@
 from django.contrib import admin
 from django.conf.urls import patterns
 from django.http import HttpResponseRedirect
-from game.tasks import validate_bot
+from pywars.tasks import validate_bot
 import itertools
 
 # Register your models here.
 
-from game.models import (
+from pywars.models import (
     Bot,
     Challenge,
     UserProfile,
     FinalChallenge,
 )
-from game.tasks import run_match
+from pywars.tasks import run_match
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -52,8 +52,8 @@ class FinalChallengeAdmin(admin.ModelAdmin):
         profiles = UserProfile.objects.filter(user__is_superuser=False, 
             user__is_active=True, current_bot__isnull=False).all()
         if not queryset:
-		    return HttpResponseRedirect('/admin')
-		    
+            return HttpResponseRedirect('/admin')
+
         final_challenge = queryset[0]
         for up_player1, up_player2 in itertools.product(profiles, repeat=2):
             if up_player1 == up_player2:

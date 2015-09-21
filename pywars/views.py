@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import BotBufferForm
 from models import Challenge, Bot, UserProfile
-from game.tasks import validate_bot
+from pywars.tasks import validate_bot
 
 
 def index(request, match_id=None):

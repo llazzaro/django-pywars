@@ -6,14 +6,14 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save
 import os
-from game.tasks import run_match
+from pywars.tasks import run_match
 
 
-sample_bot_location = os.path.join(settings.PROJECT_ROOT, 'game_engine', 'default_user_bot.py')
+#sample_bot_location = os.path.join(settings.PROJECT_ROOT, 'game_engine', 'default_user_bot.py')
 
 DEFAULT_BOT_CODE = ''
-with open(sample_bot_location, 'r') as f:
-    DEFAULT_BOT_CODE = f.read()
+#with open(sample_bot_location, 'r') as f:
+#    DEFAULT_BOT_CODE = f.read()
 
 
 class UserProfile(models.Model):
