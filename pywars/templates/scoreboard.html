@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block js %}
+<script type="text/javascript">
+        function postBot(data, url)
+        {
+            $.ajax(
+            {
+                url: url,
+                type: "POST",
+                data: JSON.stringify({ msg: data}),
+                dataType: "json",
+                async: false,
+                contentType: "application/json"
+            }).fail(function(xhr, textStatus, errorThrown) {
+                alert(xhr.responseText);
+              }).done(function(data) {
+                if ( data['success'] == false ){
+                    alert(data['msg']);
+                    return;
+                }
+                location.reload();
+              })
+        }
+    </script>
+
+    <script>
+        setTimeout(function(){
+            window.location.reload(1);
+        }, 60000);
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container main scoreboard">
+
+      <h1>Not ranked challengues</h1>
+    {% if pending_challenged_bots|length > 0 %}
+    * Pending challenges
+    {% endif%}
+
+<table id="score_table" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Action</th>
+            <th>Latest match</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for user_prof, latest_match_id in users %}
+            <tr>
+            <td>{{ user_prof }} </td>
+            <td>
+            {% if user_prof.user != user %}
+                {% if pending_challenges %}
+                    <button type="button" class="btn btn-primary btn-xs" disabled="disabled">
+                    {% if user_prof.current_bot in pending_challenged_bots%}
+                        Pending
+                    {% else %}
+                        Challenge
+                    {% endif %}
+                    </button>
+                {% else %}
+                    {% if not user_prof.current_bot %}
+                        <button type="button" class="btn btn-primary btn-xs" disabled="disabled">Challenge</button>
+                    {% else %}
+
+                        {% if user_prof.current_bot in pending_challenged_bots%}
+                            <a href="#" type="button" class="btn btn-primary btn-xs" disabled="disabled" onclick="postBot({{user_prof.current_bot.id}}, '/challenge')">Pending</a>
+                        {% else %}
+                            <a href="#" type="button" class="btn btn-primary btn-xs" onclick="postBot({{user_prof.current_bot.id}}, '/challenge')">Challenge</a>
+                        {% endif %}
+
+{% endif %}
+                {% endif %}
+            {% endif %}
+            </td>
+            <td>
+            {% if latest_match_id %}
+              <a class="btn btn-xs btn-warning" href="{% url 'view_match' match_id=latest_match_id %}">View</a>
+            {% endif %}
+            </td>
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div> <!-- /container -->
+{% endblock %}
